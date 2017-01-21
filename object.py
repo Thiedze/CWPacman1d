@@ -6,7 +6,6 @@ class Object():
 		self.color = [255,255,255]
 		self.direction = 1
 		self.speed = 1
-
-	def addPositionToGame(self, game, moving):
-		self.pos = moving.change(self.pos, self.direction , self.speed)
-		game.setObject(self)
+		self.hasWeapon = False
+		self.firedWeapon = False
+		self.isEnemy = False

@@ -4,7 +4,7 @@ class Enemy(Object):
 
 	def __init__(self):
 		Object.__init__(self)
-		self.pos = 8
-		self.color = [255,0,0]
-		self.direction =  -1
+		self.color = [0,255,0]
+		self.direction =  0
 		self.speed = 0
+		self.isEnemy = True
