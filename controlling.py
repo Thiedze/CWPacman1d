@@ -43,5 +43,16 @@ class Controlling():
 				object.pos =  self.leds - 1
 		elif( userInput == self.FIRE ):
 			object.firedWeapon = True
+
+	def moveObject(self, object):
+		if(object.movingCount == 0):
+			object.pos += (object.speed * object.direction)
+			if(object.pos == 0 and object.direction == -1):
+				object.pos = self.leds - 1
+			elif(object.pos == self.leds - 1 and object.direction == 1):
+				object.pos = 0
+			object.movingCount = object.resetMovingCount
+		else:
+			object.movingCount -= 1 
 	
 	

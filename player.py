@@ -9,6 +9,8 @@ class Player(Object):
 		self.direction = 1
 		self.color = [255,0,0]
 		self.hasWeapon = True
+		self.life = 3
+		self.resetLife = self.life
 		self.weapon = Weapon()
 
 

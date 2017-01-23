@@ -8,4 +8,5 @@ class Object():
 		self.speed = 1
 		self.hasWeapon = False
 		self.firedWeapon = False
-		self.isEnemy = False
+		self.movingCount = 20
+		self.resetMovingCount = self.movingCount 
