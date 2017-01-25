@@ -3,6 +3,11 @@ from enemy import Enemy
 from finish import Finish
 
 class Leveldesign():
+	'''
+	The level design class. 
+	
+	Design here the level. Every level should have a player and a finish. 
+	'''
 
 	def __init__(self, leds):
 		self.leds = leds
@@ -11,6 +16,9 @@ class Leveldesign():
 		self.level.append(self.getSecondLevel())
 
 	def getFirstLevel(self):
+		'''
+		The first level.
+		'''
 		level= list()
 		level.append(Player())
 		for enemyPos in range(20, 22):
@@ -24,6 +32,9 @@ class Leveldesign():
 
 
 	def getSecondLevel(self):
+		'''
+		The second level.
+		'''
 		level= list()
 		level.append(Player())
 		for enemyPos in range(7, self.leds - 1):
