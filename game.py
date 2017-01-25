@@ -165,7 +165,7 @@ class Game():
 		'''
 		Init the game plan and set the level 0.
 		'''
-		for pos in range(self.leds):
+		for _ in range(self.leds):
 			self.plan.append(None)
 		self.setLevel(self.leveldesign.level[0])
 				

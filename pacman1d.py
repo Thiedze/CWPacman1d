@@ -4,7 +4,7 @@ Pacman 1D
 Run this script to start the game. 
 
 Programmed by Sebastian Thiems
-Januar 2017
+January 2017
 
 '''
 from game import Game
