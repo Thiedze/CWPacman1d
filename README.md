@@ -8,9 +8,9 @@ A project that I see in the Game Science Center (http://www.gamesciencecenter.de
 * External power supply
 
 ## Raspberry Pining
-Led-Stripe Minus 5V to Raspberry-Pin 9
-Led-Stripe Data to Raspberry-Pin 12
-Led-Stripe Plus 5V not connected (External power supply)
+* Led-Stripe Minus 5V to Raspberry-Pin 9
+* Led-Stripe Data to Raspberry-Pin 12
+* Led-Stripe Plus 5V not connected (External power supply)
 
 ## Raspberry Pi installations
 Neopixel Lib
