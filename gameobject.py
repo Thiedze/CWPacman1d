@@ -1,5 +1,8 @@
 
-class Object():
+class GameObject():
+	'''
+	The game object.
+	'''
 
 	def __init__(self):
 		self.pos = 0

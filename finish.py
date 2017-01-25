@@ -1,9 +1,12 @@
-from object import Object
+from gameobject import GameObject
 
-class Finish(Object):
+class Finish(GameObject):
+	'''
+	The finish game object class.
+	'''
 		
 	def __init__(self):
-		Object.__init__(self)
+		GameObject.__init__(self)
 		self.direction = 0
 		self.isFinish = True
 		self.speed = 0

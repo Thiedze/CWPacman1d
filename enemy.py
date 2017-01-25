@@ -1,9 +1,12 @@
-from object import Object
+from gameobject import GameObject
 
-class Enemy(Object):
+class Enemy(GameObject):
+	'''
+	The enemy game object class.
+	'''
 
 	def __init__(self):
-		Object.__init__(self)
+		GameObject.__init__(self)
 		self.color = [0,255,0]
 		self.direction = -1
 		self.speed = 2

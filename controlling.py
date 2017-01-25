@@ -3,8 +3,19 @@ import select
 import tty
 
 class Controlling():
+	'''
+	The controlling class.
+	'''
 
 	def __init__(self, leds):
+		'''
+		Set the user input keys:
+		* LEFT 		= a
+		* RIGHT 	= d
+		* FIRE		= h
+			
+		:param leds: The led's count
+		'''
 		self.leds = leds
 		self.LEFT = "a"
 		self.RIGHT = "d"
@@ -13,6 +24,9 @@ class Controlling():
 		tty.setraw(sys.stdin.fileno())
 
 	def getUserInput(self):
+		'''
+		Get the user input. 
+		'''
 		while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
 			sys.stdout.flush()
 			char = sys.stdin.read(1)
@@ -31,28 +45,36 @@ class Controlling():
 		else:
 			return self.NOTHING
 
-	def userInput(self, object):
+	def userInput(self, gameObject):
+		'''
+		Interpret the user input.
+		:param gameObject: The game object for the user input actions. 
+		'''
 		userInput = self.getUserInput()
-		if( userInput == self.LEFT ):
-			object.pos -= (object.speed * object.direction)
-			if(object.pos < 0):
-				object.pos = 0
-		elif( userInput == self.RIGHT ):
-			object.pos += (object.speed * object.direction)
+		if(userInput == self.LEFT):
+			gameObject.pos -= (gameObject.speed * gameObject.direction)
+			if(gameObject.pos < 0):
+				gameObject.pos = 0
+		elif(userInput == self.RIGHT):
+			gameObject.pos += (gameObject.speed * gameObject.direction)
 			if(object.pos > (self.leds) - 1):
-				object.pos =  self.leds - 1
-		elif( userInput == self.FIRE ):
-			object.firedWeapon = True
+				gameObject.pos = self.leds - 1
+		elif(userInput == self.FIRE):
+			gameObject.firedWeapon = True
 
-	def moveObject(self, object):
-		if(object.movingCount == 0):
-			object.pos += (object.speed * object.direction)
-			if(object.pos == 0 and object.direction == -1):
-				object.pos = self.leds - 1
-			elif(object.pos == self.leds - 1 and object.direction == 1):
-				object.pos = 0
-			object.movingCount = object.resetMovingCount
+	def moveObject(self, gameObject):
+		'''
+		Move the game object.
+		:param gameObject: The game object.
+		'''
+		if(gameObject.movingCount == 0):
+			gameObject.pos += (gameObject.speed * gameObject.direction)
+			if(gameObject.pos == 0 and gameObject.direction == -1):
+				gameObject.pos = self.leds - 1
+			elif(gameObject.pos == self.leds - 1 and gameObject.direction == 1):
+				gameObject.pos = 0
+			gameObject.movingCount = gameObject.resetMovingCount
 		else:
-			object.movingCount -= 1 
+			gameObject.movingCount -= 1 
 	
 	
