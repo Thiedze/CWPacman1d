@@ -1,4 +1,5 @@
 from neopixel import *
+from enemy import Enemy
 
 class Drawing():
 	'''
@@ -7,8 +8,8 @@ class Drawing():
 	
 	def __init__(self, leds):
 		self.leds = leds
-		self.strip = Adafruit_NeoPixel(leds, 18, 800000, 5, False, 255)
-		self.strip.begin()
+		self.stripe = Adafruit_NeoPixel(leds, 18, 800000, 5, False, 255)
+		self.stripe.begin()
 		self.emptyPlaceColor = [0, 0, 0]
 
 	def gamePlan(self, plan):
@@ -18,8 +19,12 @@ class Drawing():
 		'''
 		for led in range(self.leds):
 			if(plan[led] == None):
-				self.strip.setPixelColorRGB(led, self.emptyPlaceColor[0], self.emptyPlaceColor[1], self.emptyPlaceColor[2])
+				self.stripe.setPixelColorRGB(led, self.emptyPlaceColor[0], self.emptyPlaceColor[1], self.emptyPlaceColor[2])
 			else:
-				self.strip.setPixelColorRGB(led, plan[led].color[0], plan[led].color[1], plan[led].color[2])
-		self.strip.show()
+				if(isinstance(plan[led], Enemy)):
+					factor = plan[led].hitCount
+					self.stripe.setPixelColorRGB(led, int(plan[led].color[0] / factor), int(plan[led].color[1] / factor), int(plan[led].color[2] / factor))
+				else:
+					self.stripe.setPixelColorRGB(led, plan[led].color[0], plan[led].color[1], plan[led].color[2])
+		self.stripe.show()
 		

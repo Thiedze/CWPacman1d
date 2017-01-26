@@ -13,3 +13,4 @@ class GameObject():
 		self.firedWeapon = False
 		self.movingCount = 20
 		self.resetMovingCount = self.movingCount 
+		

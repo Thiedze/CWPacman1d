@@ -1,6 +1,8 @@
 import sys
 import select
 import tty
+from bullet import Bullet
+from player import Player
 
 class Controlling():
 	'''
@@ -52,15 +54,23 @@ class Controlling():
 		'''
 		userInput = self.getUserInput()
 		if(userInput == self.LEFT):
-			gameObject.pos -= (gameObject.speed * gameObject.direction)
+			if(gameObject.hasWeapon == True and gameObject.weapon.fired == False):
+				gameObject.pos -= (gameObject.speed * gameObject.direction)
+			elif(gameObject.hasWeapon == False):
+				gameObject.pos -= (gameObject.speed * gameObject.direction)
 			if(gameObject.pos < 0):
 				gameObject.pos = 0
 		elif(userInput == self.RIGHT):
-			gameObject.pos += (gameObject.speed * gameObject.direction)
-			if(object.pos > (self.leds) - 1):
+			if(gameObject.hasWeapon == True and gameObject.weapon.fired == False):
+				gameObject.pos += (gameObject.speed * gameObject.direction)
+			elif(gameObject.hasWeapon == False):					
+				gameObject.pos += (gameObject.speed * gameObject.direction)
+			if(gameObject.pos > (self.leds) - 1):
 				gameObject.pos = self.leds - 1
 		elif(userInput == self.FIRE):
-			gameObject.firedWeapon = True
+			if(gameObject.hasWeapon == True):
+				gameObject.firedWeapon = True
+				gameObject.weapon.fired = True
 
 	def moveObject(self, gameObject):
 		'''
@@ -76,5 +86,6 @@ class Controlling():
 			gameObject.movingCount = gameObject.resetMovingCount
 		else:
 			gameObject.movingCount -= 1 
+			
 	
 	

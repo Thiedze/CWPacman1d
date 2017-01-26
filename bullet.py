@@ -10,4 +10,5 @@ class Bullet(GameObject):
 		self.direction = 0
 		self.speed = 0
 		self.pos = 25
+		self.duration = 4
 		self.color = [0,0,255]

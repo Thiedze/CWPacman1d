@@ -8,6 +8,7 @@ class Weapon():
 
 	def __init__(self):
 		self.size = 2
+		self.fired = False
 		self.bullet = Bullet()
 
 	def getBullets(self):

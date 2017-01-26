@@ -7,7 +7,9 @@ class Enemy(GameObject):
 
 	def __init__(self):
 		GameObject.__init__(self)
-		self.color = [0,255,0]
+		self.hitCount = 1
+		self.life = 10
+		self.color = [0, 255, 0]
 		self.direction = -1
 		self.speed = 2
-		self.hitCount = 2
+		

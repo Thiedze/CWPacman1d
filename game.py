@@ -3,6 +3,8 @@ from leveldesign import Leveldesign
 from drawing import Drawing
 from controlling import Controlling
 from player import Player
+from bullet import Bullet
+from enemy import Enemy
 import copy
 
 
@@ -36,8 +38,13 @@ class Game():
 		for pos in range(0, gameObject.weapon.size):
 			if((gameObject.pos + pos + 1) < self.leds):
 				bullets[pos].pos = gameObject.pos + pos + 1
-				self.plan[gameObject.pos + pos + 1] = bullets[pos]
-			if((gameObject.pos - pos - 1) > 0):
+				if(isinstance(self.plan[gameObject.pos + pos + 1], Enemy)):
+					self.plan[gameObject.pos + pos + 1].hitCount += 1
+					if(self.plan[gameObject.pos + pos + 1].hitCount == self.plan[gameObject.pos + pos + 1].life):
+						self.plan[gameObject.pos + pos + 1] = bullets[pos]
+				elif(self.plan[gameObject.pos + pos + 1] == None):
+					self.plan[gameObject.pos + pos + 1] = bullets[pos]
+			if((gameObject.pos - pos - 1) >= 0):
 				bullets[pos].pos = gameObject.pos - pos - 1
 				self.plan[gameObject.pos - pos - 1] = bullets[pos]
 
@@ -55,7 +62,7 @@ class Game():
 		:param gameObject:
 		'''
 		self.level = 0
-		gameObject.life = object.resetLife
+		gameObject.life = gameObject.resetLife
 		self.setLevel(self.leveldesign.level[self.level])
 
 	def hitByEnemy(self, gameObject):
@@ -63,15 +70,15 @@ class Game():
 		Check if the object is a player and hits an enemy or visa versa. 
 		:param gameObject: The game object to check ifhit by an enemy
 		'''
-		if(isinstance(self.plan[gameObject.pos], Player) and self.plan[gameObject.pos].life < 1):
+		if(isinstance(self.plan[gameObject.pos], Player) and self.plan[gameObject.pos].life <= 1):
 			self.lostGame(self.plan[gameObject.pos])
 		elif(isinstance(gameObject, Player) and gameObject.life < 1):
 			self.lostGame(gameObject)
 		else:
-			if(isinstance(self.plan[object.pos], Player)):
-				self.lostLife(self.plan[object.pos])
-			elif(isinstance(object, Player)):
-				self.lostLife(object)		
+			if(isinstance(self.plan[gameObject.pos], Player)):
+				self.lostLife(self.plan[gameObject.pos])
+			elif(isinstance(gameObject, Player)):
+				self.lostLife(gameObject)		
 
 	def reachFinish(self):
 		'''
@@ -81,6 +88,12 @@ class Game():
 		if(self.level >= len(self.leveldesign.level)):
 			self.level = 0
 		self.setLevel(self.leveldesign.level[self.level])
+
+	def checkBullets(self):
+		for gameObject in self.plan:
+			if(isinstance(gameObject, Bullet)):
+				return True
+		return False
 
 	def runGameLogic(self, gameObject):
 		'''
@@ -96,11 +109,15 @@ class Game():
 			self.hitByEnemy(gameObject)
 		else:
 			if(self.collision.detectFinish(self.plan, gameObject) == True):
-				self.reachFinish(gameObject)
+				self.reachFinish()
 			else:
 				if(gameObject.hasWeapon == True and gameObject.firedWeapon == True):
 					self.fireWeapon(gameObject)
-		self.addToGamePlan(gameObject)
+					gameObject.firedWeapon = False
+				elif(gameObject.hasWeapon == True and gameObject.firedWeapon == False):
+					if(isinstance(gameObject, Player) and self.checkBullets() == False):
+						gameObject.weapon.fired = False
+				self.addToGamePlan(gameObject)
 		
 	def addToGamePlan(self, gameObject):
 		'''
@@ -111,17 +128,11 @@ class Game():
 				
 	def removeObject(self, gameObject):
 		'''
-		Remove the weapon from the game plan.
-		:param gameObject: The game object that fired a weapon.
+		Remove game object from plan if it not a bullet.
+		:param gameObject: The game object to remove.
 		'''
-		if(gameObject.hasWeapon == True and gameObject.firedWeapon == True):
-			for pos in range(0, gameObject.weapon.size):
-				if(gameObject.pos + pos + 1 < self.leds):
-					self.plan[gameObject.pos + pos + 1] = None
-				if(gameObject.pos - pos - 1 >= 0):
-					self.plan[gameObject.pos - pos - 1] = None
-			gameObject.firedWeapon = False
-		self.plan[gameObject.pos] = None
+		if(not isinstance(self.plan[gameObject.pos], Bullet)):
+			self.plan[gameObject.pos] = None
 
 	def setLevel(self, gameObjects):
 		'''
@@ -129,20 +140,33 @@ class Game():
 		:param gameObjects: The new level objects.
 		'''
 		player = None
-		for pos in range(self.leds):
+		for pos in range(0, self.leds):
 			if(isinstance(self.plan[pos], Player)):
 				player = copy.copy(self.plan[pos])
 			self.plan[pos] = None
 		for gameObject in gameObjects:
 			self.plan[gameObject.pos] = copy.copy(gameObject)
 			if(isinstance(self.plan[gameObject.pos], Player) and player != None):
-				self.plan[gameObject].life = player.life
+				self.plan[gameObject.pos].life = player.life				
+				print self.plan[gameObject.pos].life
+				
+	def runBulletLogic(self):
+		'''
+		Run the bullet logic.
+		'''
+		for pos in range(0, self.leds):
+			if(isinstance(self.plan[pos], Bullet)):
+				if(self.plan[pos].duration == 0):
+					self.plan[pos] = None
+				else:
+					self.plan[pos].duration -= 1		
 		
 	def moveObjects(self):
 		'''
 		Move all game objects. 
 		If the game object a Player take the user input else move the game objects as defined in the class. 
 		'''
+		self.runBulletLogic()
 		for gameObject in self.plan:
 			if(gameObject != None):
 				self.removeObject(gameObject)
